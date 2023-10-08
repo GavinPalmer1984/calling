@@ -111,17 +111,17 @@ function route() {
             disabled = '';
         }
 
-        let prevButtonHtml = `<button class="btn btn-primary" onclick="showPreviousPeronalityAssessmentQuestion()">Previous</button>`;
-        let nextButtonHtml = `<button id="personality-assessment-submit-btn" class="btn btn-primary ${disabled}" onclick="showPeronalityAssessmentQuestion()">Next</button>`;
+        let prevButtonHtml = `<button class="btn btn-primary col-6" onclick="showPreviousPeronalityAssessmentQuestion()">Previous</button>`;
+        let nextButtonHtml = `<button id="personality-assessment-submit-btn" class="btn btn-primary col-6 ${disabled}" onclick="showPeronalityAssessmentQuestion()">Next</button>`;
         if (paQuestion === 1) {
-            prevButtonHtml = `<button class="btn btn-primary" onclick="showPersonalityAssessmentInstructions()">Show Instructions</button>`;
+            prevButtonHtml = `<button class="btn btn-primary col-6" onclick="showPersonalityAssessmentInstructions()">Show Instructions</button>`;
         }
         if (paQuestion === 20) {
-            nextButtonHtml = `<button id="personality-assessment-submit-btn" class="btn btn-primary ${disabled}" onclick="showPeronalityAssessmentResults()">Show Results</button>`;
+            nextButtonHtml = `<button id="personality-assessment-submit-btn" class="btn btn-primary col-6 ${disabled}" onclick="showPeronalityAssessmentResults()">Show Results</button>`;
         }
         let html = `
         <div class="col-12 mt-auto"></div>
-        <div class="text-center align-bottom" style=""><h2>${question}</h2></div>
+        <div class="col-12 text-center align-bottom" style=""><h2>${question}</h2></div>
         <div class="col-12 mt-auto"></div>
         <div class="col-12 ml-4">
             <div>${answers[1]}</div>
@@ -139,12 +139,15 @@ function route() {
             ${buttons[5]}
         </div>
         <div class="col-12 mb-4">
+            <div class="row">
             ${prevButtonHtml}
             ${nextButtonHtml}
+            </div>
         </div>
         `;
         document.getElementById('personality-assessment-question').innerHTML = html;
         document.getElementById('personality-assessment-question').style.display = 'block';
+        document.getElementById('personality-assessment-question').classList = 'row d-flex flex-column min-vh-100';
         let btnGroup = document.querySelector('.btn-group');
         console.log('btnGroup', btnGroup);
         if (btnGroup === null) {
