@@ -1,3 +1,5 @@
+let paAnswerStore = {};
+
 function showInstructions() {
     window.location.hash = 'instructions';
 }
@@ -6,8 +8,18 @@ function showPersonalityAssessmentInstructions() {
     window.location.hash = 'show-personality-assessment-instructions';
 }
 
+function showPreviousPeronalityAssessmentQuestion() {
+    let paMatch = window.location.hash.match(/^#question-pa-(\d+)$/);
+    let paQuestion = paMatch ? parseInt(paMatch[1], 10) : null;
+    if (paQuestion === null) {
+        paQuestion = 1;
+    } else {
+        paQuestion--;
+    }
+    window.location.hash = `question-pa-${paQuestion}`
+}
+
 function showPeronalityAssessmentQuestion() {
-    console.log('show personality assessment question');
     let paMatch = window.location.hash.match(/^#question-pa-(\d+)$/);
     let paQuestion = paMatch ? parseInt(paMatch[1], 10) : null;
     if (paQuestion === null) {
@@ -25,29 +37,39 @@ function showSpiritualGiftAssessmentQuestion(question = null) {
     window.location.hash = `question-sga-${question}`
 }
 
-function saveAnswers() {
-    let q1Value = document.getElementById("q1").value;
-    //... store all answers
-    localStorage.setItem("q1", q1Value);
-    // ... and so on
-}
-
 window.addEventListener('hashchange', route);
 window.addEventListener('load', route);
 
 function handlePaButtonClick(button) {
     // Get the value from the clicked button using the data-value attribute
+    const question = button.getAttribute('question-value');
     const value = button.getAttribute('data-value');
-    const answers = getPaAnswers();
+
     // Do something with the value
-    const answerText = `Selected Answer:${answers[value]}`;
-    console.log('Selected Answer:', value);
+    const answerText = getPaSelectedAnswerText(value);
 
     // If you want to visually indicate which button is active
     button.classList.add('active');
     document.getElementById('personality-assessment-submit-btn').classList.remove('disabled');
     document.getElementById('personality-assessment-answer-text').innerHTML = answerText;
+    console.log('selected answer to question', question, 'is', value);
+    paAnswerStore[question] = value;
+    pushStores();
 }
+
+function pushStores() {
+    localStorage.setItem("paAnswerStore", JSON.stringify(paAnswerStore));
+}
+
+function fetchStores() {
+    let tmpPaAnswerStore = localStorage.getItem("paAnswerStore");
+    if (tmpPaAnswerStore !== null) {
+        paAnswerStore = JSON.parse(tmpPaAnswerStore);
+    }
+    console.log('fetchStores', paAnswerStore);
+}
+
+fetchStores();
 
 function route() {
     // Hide all sections
@@ -65,41 +87,60 @@ function route() {
             id = 'landing';
         }
         document.getElementById(id).style.display = 'block';
+        document.getElementById(id).classList = 'row d-flex flex-column min-vh-100';
     } else if (paQuestion !== null) {
-        console.log('add support for pa questions');
+        const selectedAnswer = paAnswerStore[paQuestion];
+        console.log('selected Answer', selectedAnswer);
         let questions = getPaQuestions();
         let answers = getPaAnswers();
         let question = questions[paQuestion].question;
-        let buttonHtml = '<button id="personality-assessment-submit-btn" class="btn btn-primary disabled" onclick="showPeronalityAssessmentQuestion()">Next</button>';
-        if (paQuestion === 20) {
-            buttonHtml = '<button id="personality-assessment-submit-btn" class="btn btn-primary disabled" onclick="showPeronalityAssessmentResults()">Show Results</button>';
-        }
+
         let answerText = 'Select Answer Above';
+        let buttons = {
+            1: `<button type="button" class="btn btn-secondary" data-value="1" question-value="${paQuestion}">1</button>`,
+            2: `<button type="button" class="btn btn-secondary" data-value="2" question-value="${paQuestion}">2</button>`,
+            3: `<button type="button" class="btn btn-secondary" data-value="3" question-value="${paQuestion}">3</button>`,
+            4: `<button type="button" class="btn btn-secondary" data-value="4" question-value="${paQuestion}">4</button>`,
+            5: `<button type="button" class="btn btn-secondary" data-value="5" question-value="${paQuestion}">5</button>`
+        };
+        let disabled = 'disabled';
+        if (selectedAnswer) {
+            answerText = getPaSelectedAnswerText(selectedAnswer);
+            console.log(answerText);
+            buttons[selectedAnswer] = `<button type="button" class="btn btn-secondary active" data-value="${selectedAnswer}" question-value="${paQuestion}">5</button>`;
+            disabled = '';
+        }
+
+        let prevButtonHtml = `<button class="btn btn-primary" onclick="showPreviousPeronalityAssessmentQuestion()">Previous</button>`;
+        let nextButtonHtml = `<button id="personality-assessment-submit-btn" class="btn btn-primary ${disabled}" onclick="showPeronalityAssessmentQuestion()">Next</button>`;
+        if (paQuestion === 1) {
+            prevButtonHtml = `<button class="btn btn-primary" onclick="showPersonalityAssessmentInstructions()">Show Instructions</button>`;
+        }
+        if (paQuestion === 20) {
+            nextButtonHtml = `<button id="personality-assessment-submit-btn" class="btn btn-primary ${disabled}" onclick="showPeronalityAssessmentResults()">Show Results</button>`;
+        }
         let html = `
-        <div class="row">
-            <div class="col-12">
-                <h1>${question}</h1>
-            </div>
+        <div class="col-12 mt-auto"></div>
+        <div class="text-center align-bottom" style=""><h2>${question}</h2></div>
+        <div class="col-12 mt-auto"></div>
+        <div class="col-12 ml-4">
+            <div>${answers[1]}</div>
+            <div>${answers[2]}</div>
+            <div>${answers[3]}</div>
+            <div>${answers[4]}</div>
+            <div>${answers[5]}</div>
         </div>
-        <div class="row">
-            <div class="col-12">${answers[1]}</div>
-            <div class="col-12">${answers[2]}</div>
-            <div class="col-12">${answers[3]}</div>
-            <div class="col-12">${answers[4]}</div>
-            <div class="col-12">${answers[5]}</div>
+        <div class="col-12 font-italic font-weight-bolder" id="personality-assessment-answer-text">${answerText}</div>
+        <div class="btn-group col-12" role="group" aria-label="Personality Assessment Answers">
+            ${buttons[1]}
+            ${buttons[2]}
+            ${buttons[3]}
+            ${buttons[4]}
+            ${buttons[5]}
         </div>
-        <div class="container">
-            <div class="row" id="personality-assessment-answer-text">${answerText}</div>
-        </div>
-        <div class="btn-group row" role="group" aria-label="Personality Assessment Answers">
-            <button type="button" class="btn btn-secondary" data-value="1">1</button>
-            <button type="button" class="btn btn-secondary" data-value="2">2</button>
-            <button type="button" class="btn btn-secondary" data-value="3">3</button>
-            <button type="button" class="btn btn-secondary" data-value="4">4</button>
-            <button type="button" class="btn btn-secondary" data-value="5">5</button>
-        </div>
-        <div class="row">
-            ${buttonHtml}
+        <div class="col-12 mb-4">
+            ${prevButtonHtml}
+            ${nextButtonHtml}
         </div>
         `;
         document.getElementById('personality-assessment-question').innerHTML = html;
@@ -123,7 +164,14 @@ function route() {
 
 function hideAllSections() {
     const sections = document.querySelectorAll('.container > div');
-    sections.forEach(section => section.style.display = 'none');
+    sections.forEach((section) => {
+        section.style.display = 'none';
+        section.classList = '';
+    });
+}
+
+function getPaSelectedAnswerText(answer) {
+    return `Selected Answer: ${getPaAnswers()[answer]}`;
 }
 
 function getPaAnswers() {

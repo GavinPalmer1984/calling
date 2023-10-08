@@ -12,36 +12,48 @@
 </head>
 <body>
 
-<div class="container mt-5">
+<div class="container d-flex flex-column min-vh-100">
     <!-- Landing Page Content -->
     <div id="landing">
-        <h1>Welcome</h1>
-        <p>This site was inspired by the Church of the Highlands.  Our mission is to help people connect to God so we might reach our full potential.  We believe that your life will never make sense until you find, develop, and fulfill your purpose.</p>
-        <button class="btn btn-primary" onclick="showInstructions()">Start Assessment</button>
+        <div class="mt-auto"></div>
+        <div class="col-12">
+            <h2>Welcome</h2>
+            <p>This site was inspired by the Church of the Highlands.  Our mission is to help people connect to God so we might reach our full potential.  We believe that your life will never make sense until you find, develop, and fulfill your purpose.</p>
+            <button class="btn btn-primary" onclick="showInstructions()">Start Assessment</button>
+        </div>
     </div>
 
     <!-- Instructions Page Content -->
     <div id="instructions" style="display:none;">
-        <h2>Instructions</h2>
-        <p>There will be a Personality Assessment to help you make the most of your personality.  Then there will be a Spiritual Gifts Assessment to help you use those gifts for the purpose He has for you.</p>
-        <button class="btn btn-primary" onclick="showPersonalityAssessmentInstructions()">Proceed to Personality Assessment</button>
+        <div class="mt-auto"></div>
+        <div class="col-12">
+            <h2>Instructions</h2>
+            <p>There will be a Personality Assessment to help you make the most of your personality.  Then there will be a Spiritual Gifts Assessment to help you use those gifts for the purpose He has for you.</p>
+            <button class="btn btn-primary" onclick="showPersonalityAssessmentInstructions()">Proceed to Personality Assessment</button>
+        </div>
     </div>
 
     <!-- Personality Assessment Instructions Page Content -->
     <div id="show-personality-assessment-instructions" style="display:none;">
-        <h2>Personality Assessment Instructions</h2>
-        <p>Answer each question to receive your personality assessment.</p>
-        <p>There will be 20 questions which the user answers 1,2,3,4, or 5 followed by a description of your predominant personality trait.  Then there will be a description of your two highest personality traits together.</p>
-        <button class="btn btn-primary" onclick="showPeronalityAssessmentQuestion()">Proceed to Personality Assessment</button>
+        <div class="mt-auto"></div>
+        <div class="col-12">
+            <h2>Personality Assessment Instructions</h2>
+            <p>Answer each question to receive your personality assessment.</p>
+            <p>There will be 20 questions which the user answers 1,2,3,4, or 5 followed by a description of your predominant personality trait.  Then there will be a description of your two highest personality traits together.</p>
+            <button class="btn btn-primary" onclick="showPeronalityAssessmentQuestion()">Proceed to Personality Assessment</button>
+        </div>
     </div>
 
     <div id="personality-assessment-question" style="display:none;"></div>
 
     <div id="show-spiritual-gifts-assessment-instructions" style="display:none;">
-        <h2>Spiritual Gifts Assessment</h2>
-        <p>Answer each question to receive your spiritual gifts assessment.</p>
-        <p>There will be 72 questions which the user answer 1, 2, or 3 followed by a description of the user's top three spiritual gifts.</p>
-        <button class="btn btn-primary" onclick="showSpiritualGiftsAssessmentQuestion()">Proceed to Spiritual Gifts Assessment</button>
+        <div class="mt-auto"></div>
+        <div class="col-12">
+            <h2>Spiritual Gifts Assessment</h2>
+            <p>Answer each question to receive your spiritual gifts assessment.</p>
+            <p>There will be 72 questions which the user answer 1, 2, or 3 followed by a description of the user's top three spiritual gifts.</p>
+            <button class="btn btn-primary" onclick="showSpiritualGiftsAssessmentQuestion()">Proceed to Spiritual Gifts Assessment</button>
+        </div>
     </div>
 </div>
 
