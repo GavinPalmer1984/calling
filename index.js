@@ -20,6 +20,10 @@ function showPreviousPeronalityAssessmentQuestion() {
 }
 
 function showPeronalityAssessmentQuestion() {
+    const submitButton = document.getElementById('personality-assessment-submit-btn');
+    if (submitButton && submitButton.classList.contains('disabled')) {
+        return;
+    }
     let paMatch = window.location.hash.match(/^#question-pa-(\d+)$/);
     let paQuestion = paMatch ? parseInt(paMatch[1], 10) : null;
     if (paQuestion === null) {
@@ -28,6 +32,44 @@ function showPeronalityAssessmentQuestion() {
         paQuestion++;
     }
     window.location.hash = `question-pa-${paQuestion}`
+}
+
+function showPeronalityAssessmentResults() {
+    let sum = {
+        'D': 0,
+        'I': 0,
+        'S': 0,
+        'C': 0
+    };
+    const questions = getPaQuestions();
+    console.log('todo show pa results', paAnswerStore, questions);
+    for (let i = 1; i <= 20; i++) {
+        console.log(i, questions[i]);
+        let group = questions[i].personality_group_id;
+        sum[group] += parseInt(paAnswerStore[i], 10);
+    }
+    console.log('sum', sum);
+
+    let max = 0;
+    let keys = ['D', 'I', 'S', 'C'];
+    for (let i = 0; i < 4; i++) {
+        if (sum[keys[i]] > max) {
+            max = sum[keys[i]];
+        }
+    }
+    console.log('max', max);
+
+    let primary = [];
+    let secondaries = [];
+    for (let i = 0; i < 4; i++) {
+        if (sum[keys[i]] === max) {
+            primary.push(keys[i]);
+        } else {
+            secondaries.push(keys[i]);
+        }
+    }
+    console.log('primary', primary, secondaries);
+
 }
 
 function showSpiritualGiftAssessmentQuestion(question = null) {
@@ -111,13 +153,13 @@ function route() {
             disabled = '';
         }
 
-        let prevButtonHtml = `<button class="btn btn-primary col-6" onclick="showPreviousPeronalityAssessmentQuestion()">Previous</button>`;
-        let nextButtonHtml = `<button id="personality-assessment-submit-btn" class="btn btn-primary col-6 ${disabled}" onclick="showPeronalityAssessmentQuestion()">Next</button>`;
+        let prevButtonHtml = `<button class="btn btn-primary col-4" onclick="showPreviousPeronalityAssessmentQuestion()">Previous</button>`;
+        let nextButtonHtml = `<button id="personality-assessment-submit-btn" class="btn btn-primary col-4 ${disabled}" onclick="showPeronalityAssessmentQuestion()">Next</button>`;
         if (paQuestion === 1) {
-            prevButtonHtml = `<button class="btn btn-primary col-6" onclick="showPersonalityAssessmentInstructions()">Show Instructions</button>`;
+            prevButtonHtml = `<button class="btn btn-primary col-4" onclick="showPersonalityAssessmentInstructions()">Instructions</button>`;
         }
         if (paQuestion === 20) {
-            nextButtonHtml = `<button id="personality-assessment-submit-btn" class="btn btn-primary col-6 ${disabled}" onclick="showPeronalityAssessmentResults()">Show Results</button>`;
+            nextButtonHtml = `<button id="personality-assessment-submit-btn" class="btn btn-primary col-4 ${disabled}" onclick="showPeronalityAssessmentResults()">Results</button>`;
         }
         let html = `
         <div class="col-12 mt-auto"></div>
@@ -138,9 +180,11 @@ function route() {
             ${buttons[4]}
             ${buttons[5]}
         </div>
-        <div class="col-12 mb-4">
+        <div class="col-12 mb-4 mt-4">
             <div class="row">
+            <div class="col-1"></div>
             ${prevButtonHtml}
+            <div class="col-2"></div>
             ${nextButtonHtml}
             </div>
         </div>
