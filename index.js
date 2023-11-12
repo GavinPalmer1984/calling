@@ -69,7 +69,16 @@ function showPeronalityAssessmentResults() {
         }
     }
     console.log('primary', primary, secondaries);
-
+    let primaryData = getPaData(primary[0]);
+    console.log('primary data', primaryData);
+    let secondaryKey = primary[0] + '/';
+    if (primary.length > 1) {
+        secondaryKey += primary[1];
+    } else {
+        secondaryKey += secondaries[0];
+    }
+    let secondaryData = getPaData(secondaryKey);
+    console.log('secondary data', secondaryData);
 }
 
 function showSpiritualGiftAssessmentQuestion(question = null) {
@@ -230,6 +239,7 @@ function getPaAnswers() {
         5: '5 - Always'
     }
 }
+
 function getPaQuestions() {
     return {
         1: {
@@ -313,4 +323,109 @@ function getPaQuestions() {
             personality_group_id: 'C'
         }
     };
+}
+
+function getPaData(key) {
+    const data = {
+        'D': {
+            'summary': 'We are direct and decisive.',
+            'description': '',
+            'header': 'Dominant, direct, task-oriented, decisive, organized, outgoing, and outspoken. As you embrace these strengths, also make sure to:',
+            'tasks' : [
+                'Listen attentively to others.',
+                'Support other team members.',
+                'Invest in personal relationships.',
+                'Balance controlling and domineering tendencies.',
+                'Value the opinions, feelings, and desires of others.'
+            ]
+        },
+        'D/I': {
+            'summary': 'We are curious concluders who place emphasis on the bottom line and work hard to reach our goals.',
+            'description': ''
+        },
+        'D/S': {
+            'summary': 'We are achievers with an ability to persevere.',
+            'description': ''
+        },
+        'D/C': {
+            'summary': 'We are challengers that can either be determined students or defiant critics.',
+            'description': ''
+        },
+        'I': {
+            'summary': 'We ar inspiring and impressive.',
+            'description': '',
+            'header': 'Influential, witty, easygoing, outgoing, and people-oriented. As you embrace these strengths, also make sure to:',
+            'tasks': [
+                'Be aware of tasks that need to be accomplished.',
+                'Balance your emotions, words, and actions.',
+                'Remember to consider details and facts.',
+                'Slow down your pace for others instead of only talking.',
+                'Listen attentively to others instead of only talking.',
+                'Choose thoughtful over impulsive decision-making.'
+            ]
+        },
+        'I/D': {
+            'summary': 'We are persuaders who are outgoing and energetic.',
+            'description': ''
+        },
+        'I/S': {
+            'summary': 'We are influential counselors who love people, and it\'s no surprise that people love us.',
+            'description': ''
+        },
+        'I/C': {
+            'summary': 'We are inspiring yet cautious assessors who are excellent communicators through the combination of concerned awareness and appreciation of people.',
+            'description': ''
+        },
+        'S' : {
+            'summary': 'We are steady and more reserved.',
+            'description': '',
+            'header': 'Steady, stable, analytical, introverted, and people-oriented. As you embrace these strengths, also make sure to:',
+            'tasks': [
+                'Take initiative.',
+                'Practice flexibility.',
+                'Approach confrontation constructively.',
+                'Be direct in your interactions when necessary.',
+                'Realize change can be healthy, and be willing to adapt.',
+                'Consider the overall goals of your family or group, not just specific processes or procedures.'
+            ]
+        },
+        'S/D' : {
+            'summary': 'We are quiet leaders who can be counted on to get the job done.',
+            'description': ''
+        },
+        'S/I' : {
+            'summary': 'We are inspirational counselors who exhibit warmth and sensitivity.',
+            'description': ''
+        },
+        'S/C' : {
+            'summary': 'We are diplomatic and steady, as well as detail-oriented.',
+            'description': ''
+        },
+        'C' : {
+            'summary': 'We are compliant and anlytical.',
+            'description': '',
+            'header': 'Compliant, competent, goal-oriented, focused on tasks, and introverted.  As you embrace these strengths, also make sure to:',
+            'tasks': [
+                'Be decisive when necessary.',
+                'Cultivate personal relationships.',
+                'Be open to others\' ideas and methods.',
+                'Balance your focus between facts and people.',
+                'Focus on doing the right things, not just doing things right.',
+                'Help others accomplish their goals.'
+            ]
+        },
+        'C/D' : {
+            'summary': 'We are cautious and determined designers who are consistently task-oriented and very aware of problems.',
+            'description': ''
+        },
+        'C/I' : {
+            'summary': 'We are attentive to the details.',
+            'description': ''
+        },
+        'C/S' : {
+            'summary': 'We are systematic and stable.',
+            'description': ''
+        }
+    };
+    return data[key];
 }
